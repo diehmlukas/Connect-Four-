@@ -18,7 +18,9 @@ public final class IO {
     }
 
     public static int readColumn() throws Exception{
-        return Integer.parseInt(String.valueOf(System.in.read()));
+        int out = Integer.parseInt(String.valueOf(System.in.read()));
+        System.in.read();
+        return out;
     }
 
     public static void printMap(char[][] map, String[] player){

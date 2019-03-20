@@ -4,7 +4,7 @@ public class Logic {
     private char[][] map;
 
     public Logic() throws Exception{
-        map = new char[7][7];
+        map = new char[8][8];
         this.player1 = new String[2];
         this.player2 = new String[2];
         this.player1[1] = "X";
@@ -57,9 +57,27 @@ public class Logic {
             i++;
 
         //check if there's a vertical match
+        boolean out = verticalMatch(i, lastColumn, sign);
+        if (out)
+            return out;
+
+        //check if there's a horizontal match
+        out = horizontalMatch(i, sign);
+        if (out)
+            return out;
+
+        //check if there's a diagonal match
+        out = diagonalMatch(sign);
+        if (out)
+            return out;
+        else
+            return false;
+    }
+
+    private boolean verticalMatch(int pos, int lastColumn, char sign) {
         boolean out = false;
-        if (i > 2) {
-            for (int j = i; j >= (i-3); j--) {
+        if (pos > 2) {
+            for (int j = pos; j >= (pos-3); j--) {
                 if (map[j][lastColumn] == sign)
                     out = true;
                 else {
@@ -68,26 +86,83 @@ public class Logic {
                 }
             }
         }
+        return out;
+    }
 
-        if (out)
-            return out;
-        else { //check if there's a horizontal match
-            for (int j = 0; j < 8; j++) {
-                if (map[i][j] == sign)
-                    out = true;
-                else if(j >= 5 && !out) {
-                    break;
-                } else {
-                    out = false;
-                }
+    private boolean horizontalMatch(int pos, char sign) {
+        boolean out = false;
+        for (int j = 0; j < 8; j++) {
+            if (map[pos][j] == sign)
+                out = true;
+            else if(j >= 5 && !out) {
+                break;
+            } else {
+                out = false;
             }
         }
+        return out;
+    }
 
+    private boolean diagonalMatch(char sign) {
+        boolean out = false;
+
+        //lower half - left to right
+        for (int k = 0; k < 5; k++) {
+            for (int h = 0; h <= (8-k); h++) {
+                if (map[h + k][h] == sign)
+                    out = true;
+                else if (h >= 5 && !out)
+                    break;
+                else
+                    out = false;
+            }
+        }
         if (out)
             return out;
-        else { //check if there's a diagonal match
 
+        //upper half - left to right
+        for (int k = 0; k < 5; k++) {
+            for (int h = 0; h <= (8-k); h++) {
+                if (map[h][h + k] == sign)
+                    out = true;
+                else if (h >= 5 && !out)
+                    break;
+                else
+                    out = false;
+            }
         }
+        if (out)
+            return out;
+
+        //lower half - right to left
+        for (int k = 7; k > 2; k--) {
+            for (int h = 0; h <= k; h++) {
+                if (map[7 - h][h] == sign)
+                    out = true;
+                else if (h >= 5 && !out)
+                    break;
+                else
+                    out = false;
+            }
+        }
+        if (out)
+            return out;
+
+        //upper half - right to left
+        for (int k = 7; k > 2; k--) {
+            for (int h = 0; h <= k; h++) {
+                if (map[h][7 - h] == sign)
+                    out = true;
+                else if (h >= 5 && !out)
+                    break;
+                else
+                    out = false;
+            }
+        }
+        if (out)
+            return out;
+        else
+            return false;
     }
 
     private void insertCoin(int column, char sign) {
