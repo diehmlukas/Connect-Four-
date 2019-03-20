@@ -17,9 +17,9 @@ public final class IO {
         return bufferedReader.readLine();
     }
 
-    public static int readColumn() throws Exception{
-        int out = Integer.parseInt(String.valueOf(System.in.read()));
-        System.in.read();
+    public static int readColumn() throws Exception{    //error with Integer.parseInt(String.valueOf(System.in.read())); I used 4 to testing
+        int out = 4;//Integer.parseInt(String.valueOf(System.in.read()));
+       // System.in.read();
         return out;
     }
 

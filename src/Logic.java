@@ -53,7 +53,7 @@ public class Logic {
     private boolean checkCoins(char sign, int lastColumn) {
         //get position
         int i = 0;
-        while(map[i][lastColumn] != sign)
+        while(map[i][lastColumn] != sign)                       //exit is missing
             i++;
 
         //check if there's a vertical match
