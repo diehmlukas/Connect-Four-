@@ -21,7 +21,8 @@ public class Logic {
             for (int j=0; j<8; j++)
                 map[i][j] = '.';
         }
-        IO.printMap(map, player1);
+        IO.printMap(map);
+        IO.nextPlayer(player1);
     }
 
     public void execGame(){
@@ -32,12 +33,14 @@ public class Logic {
                 if (count % 2 == 0) {
                     insertCoin(column, player1[1].toCharArray()[0]);
                     checkHelper(player1, column);
-                    IO.printMap(map, player2);
+                    IO.printMap(map);
+                    IO.nextPlayer(player2);
                 }
                 else {
                     insertCoin(column, player2[1].toCharArray()[0]);
                     checkHelper(player2, column);
-                    IO.printMap(map, player1);
+                    IO.printMap(map);
+                    IO.nextPlayer(player1);
                 }
             }
             count++;
@@ -47,6 +50,7 @@ public class Logic {
 
     private void checkHelper(String[] player, int column) {
         if (checkCoins(player[1].toCharArray()[0], column)){
+            IO.printMap(map);
             IO.win(player[0]);
             System.exit(0);
         }
@@ -55,7 +59,7 @@ public class Logic {
     private boolean checkCoins(char sign, int lastColumn) {
         //get position
         int i = 0;
-        while(map[i][lastColumn] != sign && i < 7)
+        while(map[i][lastColumn] != sign && i <= 7)
             i++;
 
         //check if there's a vertical match
@@ -69,7 +73,7 @@ public class Logic {
             return out;
 
         //check if there's a diagonal match
-        //out = diagonalMatch(sign);
+        out = diagonalMatch(sign);
         if (out)
             return out;
         else
@@ -78,10 +82,16 @@ public class Logic {
 
     private boolean verticalMatch(int pos, int lastColumn, char sign) {
         boolean out = false;
-        if (pos > 2) {
-            for (int j = pos; j >= (pos-3); j--) {
+        int count = 1;
+        if (pos < 5) {
+            for (int j = pos; j <= 7; j++) { //
                 if (map[j][lastColumn] == sign)
-                    out = true;
+                    if (count == 4) {
+                        out = true;
+                        break;
+                    }
+                    else
+                        count++;
                 else {
                     out = false;
                     break;
@@ -93,13 +103,20 @@ public class Logic {
 
     private boolean horizontalMatch(int pos, char sign) {
         boolean out = false;
-        for (int j = 0; j < 8; j++) {
+        int count = 1;
+        for (int j = 0; j <= 7; j++) {
             if (map[pos][j] == sign)
-                out = true;
-            else if(j >= 5 && !out) {
+                if (count == 4) {
+                    out = true;
+                    break;
+                }
+                else
+                    count++;
+            else if(j > 4 && !out) {
                 break;
             } else {
                 out = false;
+                count = 1;
             }
         }
         return out;
@@ -168,11 +185,15 @@ public class Logic {
     }
 
     private void insertCoin(int column, char sign) {
-        for (int i = 0; i < 8; i++) {
-            if (map[i][column] == '.' && i == 0)
+        for (int i = 7; i >= 0; i--) {
+            if (map[i][column] == '.' && i == 7) {
                 map[i][column] = sign;
-            else if(map[i][column] == '.' && map[i - 1][column] != '.')
+                break;
+            }
+            else if(map[i][column] == '.' && map[i + 1][column] != '.') {
                 map[i][column] = sign;
+                break;
+            }
         }
     }
     
@@ -184,7 +205,7 @@ public class Logic {
             return -1;
         }
 
-        if (map[7][column] == '.')
+        if (map[0][column] == '.')
             return column;
         else {
             IO.errorStackOverflow();

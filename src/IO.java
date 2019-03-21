@@ -36,7 +36,8 @@ public final class IO {
         return out;
     }
 
-    public static void printMap(char[][] map, String[] player){
+    public static void printMap(char[][] map){
+        System.out.println();
         printMapHead();
         for (int i=0; i<8; i++){
             for (int j=0; j<8; j++)
@@ -44,27 +45,30 @@ public final class IO {
             System.out.println();
         }
         printMapHead();
-        System.out.println();
-        nextPlayer(player);
     }
 
     public static void win(String player) {
-        System.out.println(player + "has won!\n");
+        System.out.println(player + " has won!");
+        System.out.println();
     }
 
     public static void errorOutOfBounds() {
-        System.out.println("Invalid turn! PLease enter a number between 1 and 8 next time!\n");
+        System.out.println("Invalid turn! PLease enter a number between 1 and 8 next time!");
+        System.out.println("Next player!");
+        System.out.println();
     }
 
     public static void errorStackOverflow() {
         System.out.println("Current stack already full! Your coin has been removed.");
+        System.out.println("Next player!");
+        System.out.println();
     }
 
     public static void tieGame() {
         System.out.println("All stones (21) were used! It's a tie!");
     }
 
-    private static void nextPlayer(String[] player) {
+    public static void nextPlayer(String[] player) {
         System.out.println();
         System.out.println(player[0] + " it's your turn! Choose a column to insert your coin (" + player[1] + ").");
     }
