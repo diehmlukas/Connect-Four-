@@ -12,14 +12,27 @@ public final class IO {
         System.out.println("12345678");
     }
 
-    public static String readPlayer() throws Exception{
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        return bufferedReader.readLine();
+    public static String readPlayer(){
+        String out = "";
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+            out = bufferedReader.readLine();
+        }
+        catch (IOException e) {
+            System.out.println(e);
+        }
+        return out;
     }
 
-    public static int readColumn() throws Exception{    //error with Integer.parseInt(String.valueOf(System.in.read())); I used 4 to testing
-        int out = 4;//Integer.parseInt(String.valueOf(System.in.read()));
-       // System.in.read();
+    public static int readColumn(){
+        int out = -1;
+        try {
+            out = System.in.read() - 49;
+            System.in.read();
+        }
+        catch (IOException e) {
+            System.out.println(e);
+        }
         return out;
     }
 
@@ -32,22 +45,26 @@ public final class IO {
         }
         printMapHead();
         System.out.println();
-        curPlayer(player);
+        nextPlayer(player);
     }
 
     public static void win(String player) {
         System.out.println(player + "has won!\n");
     }
 
-    public static void errorMessage() {
+    public static void errorOutOfBounds() {
         System.out.println("Invalid turn! PLease enter a number between 1 and 8 next time!\n");
+    }
+
+    public static void errorStackOverflow() {
+        System.out.println("Current stack already full! Your coin has been removed.");
     }
 
     public static void tieGame() {
         System.out.println("All stones (21) were used! It's a tie!");
     }
 
-    private static void curPlayer(String[] player) {
+    private static void nextPlayer(String[] player) {
         System.out.println();
         System.out.println(player[0] + " it's your turn! Choose a column to insert your coin (" + player[1] + ").");
     }

@@ -1,9 +1,9 @@
 public class Logic {
-    private String[] player1 = new String[2]; //X
-    private String[] player2 = new String[2]; //O
+    private String[] player1; //X
+    private String[] player2; //O
     private char[][] map;
 
-    public Logic() throws Exception{
+    public Logic(){
         map = new char[8][8];
         this.player1 = new String[2];
         this.player2 = new String[2];
@@ -12,7 +12,7 @@ public class Logic {
         startGame();
     }
 
-    private void startGame() throws Exception{
+    private void startGame(){
         IO.printStartText();
         this.player1[0] = IO.readPlayer();
         this.player2[0] = IO.readPlayer();
@@ -24,18 +24,20 @@ public class Logic {
         IO.printMap(map, player1);
     }
 
-    public void execGame() throws Exception{
+    public void execGame(){
         int count = 0;
         do {
             int column = checkColumn();
             if (column != -1) {
                 if (count % 2 == 0) {
                     insertCoin(column, player1[1].toCharArray()[0]);
-                    checkHelper(player1[0], column);
+                    checkHelper(player1, column);
+                    IO.printMap(map, player2);
                 }
                 else {
                     insertCoin(column, player2[1].toCharArray()[0]);
-                    checkHelper(player2[0], column);
+                    checkHelper(player2, column);
+                    IO.printMap(map, player1);
                 }
             }
             count++;
@@ -43,9 +45,9 @@ public class Logic {
         IO.tieGame();
     }
 
-    private void checkHelper(String player, int column) {
-        if (checkCoins(player.toCharArray()[0], column)){
-            IO.win(player);
+    private void checkHelper(String[] player, int column) {
+        if (checkCoins(player[1].toCharArray()[0], column)){
+            IO.win(player[0]);
             System.exit(0);
         }
     }
@@ -53,7 +55,7 @@ public class Logic {
     private boolean checkCoins(char sign, int lastColumn) {
         //get position
         int i = 0;
-        while(map[i][lastColumn] != sign)                       //exit is missing
+        while(map[i][lastColumn] != sign && i < 7)
             i++;
 
         //check if there's a vertical match
@@ -67,7 +69,7 @@ public class Logic {
             return out;
 
         //check if there's a diagonal match
-        out = diagonalMatch(sign);
+        //out = diagonalMatch(sign);
         if (out)
             return out;
         else
@@ -167,17 +169,25 @@ public class Logic {
 
     private void insertCoin(int column, char sign) {
         for (int i = 0; i < 8; i++) {
-            if (map[column][i] != '.')
-                map[column][i - 1] = sign;
+            if (map[i][column] == '.' && i == 0)
+                map[i][column] = sign;
+            else if(map[i][column] == '.' && map[i - 1][column] != '.')
+                map[i][column] = sign;
         }
     }
     
-    private int checkColumn() throws Exception{
+    private int checkColumn(){
         int column = IO.readColumn();
-        if (column >= 0 && column < 8)
+        if (column >= 0 && column < 8) {}
+        else {
+            IO.errorOutOfBounds();
+            return -1;
+        }
+
+        if (map[7][column] == '.')
             return column;
         else {
-            IO.errorMessage();
+            IO.errorStackOverflow();
             return -1;
         }
     }
