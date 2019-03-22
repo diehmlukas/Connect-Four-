@@ -3,7 +3,7 @@ public class Logic {
     private String[] player2; //O
     private char[][] map;
 
-    public Logic(){
+    protected Logic(){
         map = new char[8][8];
         this.player1 = new String[2];
         this.player2 = new String[2];
@@ -12,20 +12,7 @@ public class Logic {
         startGame();
     }
 
-    private void startGame(){
-        IO.printStartText();
-        this.player1[0] = IO.readPlayer();
-        this.player2[0] = IO.readPlayer();
-
-        for (int i=0; i<8; i++){
-            for (int j=0; j<8; j++)
-                map[i][j] = '.';
-        }
-        IO.printMap(map);
-        IO.nextPlayer(player1);
-    }
-
-    public void execGame(){
+    protected void execGame(){
         int count = 0;
         do {
             int column = checkColumn();
@@ -34,13 +21,15 @@ public class Logic {
                     insertCoin(column, player1[1].toCharArray()[0]);
                     checkHelper(player1, column);
                     IO.printMap(map);
-                    IO.nextPlayer(player2);
+                    if (count < 41)
+                        IO.nextPlayer(player2);
                 }
                 else {
                     insertCoin(column, player2[1].toCharArray()[0]);
                     checkHelper(player2, column);
                     IO.printMap(map);
-                    IO.nextPlayer(player1);
+                    if (count < 41)
+                        IO.nextPlayer(player1);
                 }
             }
             count++;
@@ -73,7 +62,7 @@ public class Logic {
             return out;
 
         //check if there's a diagonal match
-        out = diagonalMatch(sign);
+        //out = diagonalMatch(sign);
         if (out)
             return out;
         else
@@ -212,5 +201,18 @@ public class Logic {
             IO.errorStackOverflow();
             return -1;
         }
+    }
+
+    private void startGame(){
+        IO.printStartText();
+        this.player1[0] = IO.readPlayer();
+        this.player2[0] = IO.readPlayer();
+
+        for (int i=0; i<8; i++){
+            for (int j=0; j<8; j++)
+                map[i][j] = '.';
+        }
+        IO.printMap(map);
+        IO.nextPlayer(player1);
     }
 }

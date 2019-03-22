@@ -1,7 +1,7 @@
 import java.io.*;
 
 public final class IO {
-    public static void printStartText() {
+    protected static void printStartText() {
         System.out.println("Welcome to Connect4!\n");
         System.out.println("Please take some time to read the rules.\n");
         System.out.println("Rules:");
@@ -12,11 +12,7 @@ public final class IO {
         System.out.println("In order to start playing, please enter your names.");
     }
 
-    public static void printMapHead() {
-        System.out.println("12345678");
-    }
-
-    public static String readPlayer(){
+    protected static String readPlayer(){
         String out = "";
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
@@ -28,7 +24,7 @@ public final class IO {
         return out;
     }
 
-    public static int readColumn(){
+    protected static int readColumn(){
         int out = -1;
         try {
             out = System.in.read() - 49;
@@ -40,7 +36,7 @@ public final class IO {
         return out;
     }
 
-    public static void printMap(char[][] map){
+    protected static void printMap(char[][] map){
         System.out.println();
         printMapHead();
         for (int i=0; i<8; i++){
@@ -51,30 +47,34 @@ public final class IO {
         printMapHead();
     }
 
-    public static void win(String player) {
+    protected static void win(String player) {
         System.out.println(player + " has won!");
         System.out.println();
     }
 
-    public static void errorOutOfBounds() {
+    protected static void errorOutOfBounds() {
         System.out.println("Invalid turn! PLease enter a number between 1 and 8 next time!");
         System.out.println("Next player!");
         System.out.println();
     }
 
-    public static void errorStackOverflow() {
+    protected static void errorStackOverflow() {
         System.out.println("Current stack already full! Your coin has been removed.");
         System.out.println("Next player!");
         System.out.println();
     }
 
-    //TODO: tie game testing
-    public static void tieGame() {
+    protected static void tieGame() {
+        System.out.println();
         System.out.println("All stones (21) were used! It's a tie!");
     }
 
-    public static void nextPlayer(String[] player) {
+    protected static void nextPlayer(String[] player) {
         System.out.println();
         System.out.println(player[0] + " it's your turn! Choose a column to insert your coin (" + player[1] + ").");
+    }
+
+    private static void printMapHead() {
+        System.out.println("12345678");
     }
 }
