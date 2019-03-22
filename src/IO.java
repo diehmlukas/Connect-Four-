@@ -68,6 +68,7 @@ public final class IO {
         System.out.println();
     }
 
+    //TODO: tie game testing
     public static void tieGame() {
         System.out.println("All stones (21) were used! It's a tie!");
     }

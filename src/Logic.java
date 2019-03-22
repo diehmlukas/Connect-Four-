@@ -44,7 +44,7 @@ public class Logic {
                 }
             }
             count++;
-        }while(count<43);
+        }while(count<42);
         IO.tieGame();
     }
 
@@ -122,6 +122,7 @@ public class Logic {
         return out;
     }
 
+    //FIXME: diagonal match debugging + tetsing
     private boolean diagonalMatch(char sign) {
         boolean out = false;
 
