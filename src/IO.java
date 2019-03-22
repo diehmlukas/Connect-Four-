@@ -2,9 +2,13 @@ import java.io.*;
 
 public final class IO {
     public static void printStartText() {
-        System.out.println("Welcome to Collect4!");
-        System.out.println("Please take some time to read the rules and this brief description.");
+        System.out.println("Welcome to Connect4!\n");
+        System.out.println("Please take some time to read the rules.\n");
         System.out.println("Rules:");
+        System.out.println("To win Connect Four, all you have to do is connect four of your checker pieces in a row.");
+        System.out.println("This can be done horizontally, vertically or diagonally. Each player will drop in one checker piece at a time.");
+        System.out.println("This will give you a chance to either build your row, or stop your opponent from getting four in a row.");
+        System.out.println("The game is over either when you or your friend reaches four in a row, or when all forty two slots are filled, ending in a tie.\n\n");
         System.out.println("In order to start playing, please enter your names.");
     }
 
