@@ -48,6 +48,7 @@ public final class IO {
     }
 
     protected static void win(String player) {
+        System.out.println();
         System.out.println(player + " has won!");
         System.out.println();
     }

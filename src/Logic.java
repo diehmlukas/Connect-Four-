@@ -17,20 +17,10 @@ public class Logic {
         do {
             int column = checkColumn();
             if (column != -1) {
-                if (count % 2 == 0) {
-                    insertCoin(column, player1[1].toCharArray()[0]);
-                    checkHelper(player1, column);
-                    IO.printMap(map);
-                    if (count < 41)
-                        IO.nextPlayer(player2);
-                }
-                else {
-                    insertCoin(column, player2[1].toCharArray()[0]);
-                    checkHelper(player2, column);
-                    IO.printMap(map);
-                    if (count < 41)
-                        IO.nextPlayer(player1);
-                }
+                if (count % 2 == 0)
+                    execGameHelper(count, player1, column);
+                else
+                    execGameHelper(count, player2, column);
             }
             count++;
         }while(count<42);
@@ -62,7 +52,7 @@ public class Logic {
             return out;
 
         //check if there's a diagonal match
-        //out = diagonalMatch(sign);
+        out = diagonalMatch(sign);
         if (out)
             return out;
         else
@@ -111,67 +101,68 @@ public class Logic {
         return out;
     }
 
-    //FIXME: diagonal match debugging + tetsing
     private boolean diagonalMatch(char sign) {
-        boolean out = false;
+        int count = 1;
 
-        //lower half - left to right
+        //middle -> upper right corner
         for (int k = 0; k < 5; k++) {
-            for (int h = 0; h <= (8-k); h++) {
-                if (map[h + k][h] == sign)
-                    out = true;
-                else if (h >= 5 && !out)
+            for (int h = 0; h <= (7 - k); h++) { //old: (8 - k)
+                if (map[h + k][h] == sign) {
+                    if (count == 4)
+                        return true;
+                    count++;
+                } else if (h >= (5 - k)) //old: h >= k
                     break;
                 else
-                    out = false;
+                    count = 1;
             }
         }
-        if (out)
-            return out;
+        count = 1;
 
-        //upper half - left to right
+        //middle -> lower left corner
         for (int k = 0; k < 5; k++) {
-            for (int h = 0; h <= (8-k); h++) {
-                if (map[h][h + k] == sign)
-                    out = true;
-                else if (h >= 5 && !out)
+            for (int h = 0; h <= (7 - k); h++) {
+                if (map[h][h + k] == sign) {
+                    if (count == 4)
+                        return true;
+                    count++;
+                } else if (h >= (5 - k))
                     break;
                 else
-                    out = false;
+                    count = 1;
             }
         }
-        if (out)
-            return out;
+        count = 1;
 
-        //lower half - right to left
+        //middle -> upper left corner
         for (int k = 7; k > 2; k--) {
             for (int h = 0; h <= k; h++) {
-                if (map[7 - h][h] == sign)
-                    out = true;
-                else if (h >= 5 && !out)
+                if (map[h][k - h] == sign) {
+                    if (count == 4)
+                        return true;
+                    count++;
+                } else if (h >= 5)
                     break;
                 else
-                    out = false;
+                    count = 1;
             }
         }
-        if (out)
-            return out;
+        count = 1;
 
-        //upper half - right to left
-        for (int k = 7; k > 2; k--) {
-            for (int h = 0; h <= k; h++) {
-                if (map[h][7 - h] == sign)
-                    out = true;
-                else if (h >= 5 && !out)
+        //middle -> lower right corner
+        for (int k = 0; k < 5; k++) {
+            for (int h = 7; h >= k; h--) {
+                if (map[7 - h + k][h] == sign) {
+                    if (count == 4)
+                        return true;
+                    count++;
+                } else if (h <= 2)
                     break;
                 else
-                    out = false;
+                    count = 1;
             }
         }
-        if (out)
-            return out;
-        else
-            return false;
+        return false;
     }
 
     private void insertCoin(int column, char sign) {
@@ -214,5 +205,17 @@ public class Logic {
         }
         IO.printMap(map);
         IO.nextPlayer(player1);
+    }
+
+    private void execGameHelper(int count, String[] player, int column) {
+        insertCoin(column, player[1].toCharArray()[0]);
+        if (count > 7) //the first chance of winning comes with the eigth checker
+            checkHelper(player, column);
+        IO.printMap(map);
+        if (count < 41)
+            if (player[1].matches("X"))
+                IO.nextPlayer(player2);
+            else
+                IO.nextPlayer(player1);
     }
 }
